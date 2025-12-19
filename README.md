@@ -96,8 +96,8 @@ global_hsr_database/
 │
 └── docs/                       # Full documentation
     ├── README_CS340.md         # Academic documentation
-    ├── ERD.pdf                 # Entity-relationship diagram
-    └── schema.sql              # Database schema reference
+    ├── Project Step 6.pdf      # Final project submission
+    └── screenshots/            # Application screenshots
 ```
 
 ---
