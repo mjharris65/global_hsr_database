@@ -18,7 +18,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 2181;
+const PORT = process.env.PORT || 3000;
+
 
 // -------------------------------
 // Handlebars
@@ -640,8 +641,7 @@ app.get("/reset-database", async (req, res) => {
 // Start Server
 // ====================================================================
 app.listen(PORT, () => {
-  console.log(
-    `Dynamic server running at http://classwork.engr.oregonstate.edu:${PORT}`
-  );
+  console.log(`Server listening on port ${PORT}`);
 });
+
 
