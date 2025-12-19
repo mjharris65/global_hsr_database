@@ -723,44 +723,68 @@ form {
   transition: background-color 0.4s ease;
 }
 
-/* Mobile nav fix (iOS Safari clipping) */
+/* Mobile: force single-line nav without scrolling (shrink + abbreviate) */
 @media (max-width: 768px) {
   nav {
     display: flex;
-    align-items: center;
+    flex-wrap: nowrap;           /* one line */
+    justify-content: center;
+    gap: 6px;
 
-    flex-wrap: nowrap;                 /* one line; scroll */
-    justify-content: flex-start;       /* don't pin last item to the edge */
-    gap: 12px;
-
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-
-    /* right/left breathing room + safe-area */
-    padding: 10px calc(18px + env(safe-area-inset-right)) 10px
-             calc(12px + env(safe-area-inset-left));
-
+    overflow-x: hidden;          /* no top scrollbar */
+    padding: 8px 6px;            /* tighter */
     box-sizing: border-box;
     width: 100%;
-    max-width: 100%;
   }
 
   nav a {
-    font-size: clamp(8px, 2vw, 11px);
-    padding: 8px 3px;
-
+    font-size: 9px;              /* aggressive */
+    padding: 6px 3px;
+    letter-spacing: 0.3px;
     white-space: nowrap;
-    flex: 0 0 auto;                    /* prevent shrinking */
+    flex: 0 1 auto;              /* allow a LITTLE shrink if needed */
   }
 
-  nav a:last-child {
-    margin-right: 14px;                /* ensure RESET can scroll fully in */
+  /* Hide the long labels on mobile; we'll replace with short ones */
+  nav a[href="/projectLines"],
+  nav a[href="/lineStations"] {
+    font-size: 0;                /* hides text but keeps the link */
+    padding: 6px 3px;
+  }
+
+  /* Replace with shorter labels */
+  nav a[href="/projectLines"]::after {
+    content: "Proj–Line";
+    font-size: 9px;
+    letter-spacing: 0.3px;
+  }
+
+  nav a[href="/lineStations"]::after {
+    content: "Line–Sta";
+    font-size: 9px;
+    letter-spacing: 0.3px;
+  }
+
+  /* Make RESET even tighter */
+  nav a.reset-link {
+    padding: 6px 2px;
+    letter-spacing: 0.2px;
   }
 }
 
 @media (max-width: 400px) {
+  nav {
+    gap: 4px;
+    padding: 8px 4px;
+  }
+
   nav a {
-    font-size: clamp(7px, 1.8vw, 9px);
-    padding: 8px 2px;
+    font-size: 8px;
+    padding: 6px 2px;
+  }
+
+  nav a[href="/projectLines"]::after,
+  nav a[href="/lineStations"]::after {
+    font-size: 8px;
   }
 }
