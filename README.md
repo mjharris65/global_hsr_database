@@ -14,6 +14,8 @@ A full-stack web application for managing global high-speed rail infrastructure.
 
 Developed as a term project for **CS340 – Introduction to Databases** at Oregon State University.
 
+**Live Demo:** https://globalhsrdatabase-production.up.railway.app/
+
 ---
 
 ## Overview
