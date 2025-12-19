@@ -27,7 +27,28 @@ The Global High-Speed Rail Infrastructure Database models the operational struct
 - Construction projects and their relationships to rail lines
 - Complex many-to-many relationships between entities
 
-Key features include full CRUD operations with referential integrity enforcement, dynamic form interactions, success/error feedback systems, and a cyberpunk-inspired visual design with ambient video and audio.
+Key features include full CRUD operations with referential integrity enforcement, dynamic form interactions, and a polished, cyberpunk-inspired user interface.
+
+This project emphasizes real-world relational modeling over toy datasets, mirroring the complexity of production database systems.
+
+**Entity Management (CRUD)**
+![Countries table showing CRUD interface and relational attributes](docs/screenshots/table-page.jpeg)
+
+**Many-to-Many Mapping**
+![Many-to-many mapping page screenshot](docs/screenshots/mn-mapping.jpeg)
+
+### Screenshots
+
+<p>
+  <b>Entity Management (CRUD)</b><br/>
+  <img src="docs/screenshots/table-page.jpeg" width="900" alt="Entity table page screenshot">
+</p>
+
+<p>
+  <b>Many-to-Many Mapping</b><br/>
+  <img src="docs/screenshots/mn-mapping.jpeg" width="900" alt="Many-to-many mapping page screenshot">
+</p>
+
 
 ---
 
@@ -107,13 +128,13 @@ global_hsr_database/
 
 3. **Configure database connection**
    
-   Create a `.env` file in the `project/` directory:
+   (See .env.example for required variables):
    ```env
    DB_HOST=localhost
    DB_USER=your_username
    DB_PASSWORD=your_password
    DB_NAME=hsr_database
-   PORT=2181
+   PORT=3000
    ```
 
 4. **Set up the database**
@@ -193,4 +214,4 @@ Comprehensive documentation is available in the [`docs/`](./docs) directory:
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
