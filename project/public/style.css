@@ -646,14 +646,15 @@ form {
   transition: background-color 0.4s ease;
 }
 
-/* Make the nav more compact so RESET fits (no other layout changes) */
+/* Slightly larger than the compact fix, still smaller than original */
 nav {
-  padding: 10px 6px;     /* was 12px 10px */
-  gap: 0.85rem;          /* was 1.2rem */
-  row-gap: 0.35rem;      /* was 0.6rem */
+  padding: 10px 6px;   /* keep compact */
+  gap: 0.90rem;
+  row-gap: 0.40rem;
 }
 
 nav a {
-  font-size: 0.80rem;    /* smaller than your clamp */
-  letter-spacing: 0.6px; /* was 0.8px */
+  font-size: 0.78rem;  /* slightly larger than before, still < original */
+  letter-spacing: 0.6px;
 }
+
