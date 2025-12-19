@@ -113,7 +113,7 @@ global_hsr_database/
    DB_USER=your_username
    DB_PASSWORD=your_password
    DB_NAME=hsr_database
-   PORT=2181
+   PORT=3000
    ```
 
 4. **Set up the database**
