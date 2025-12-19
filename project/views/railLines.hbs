@@ -1,0 +1,183 @@
+{{!--
+Citation: ChatGPT (OpenAI, 2025) was used to help refine Handlebars looping
+syntax and ensure consistent data binding. All template structure and content
+were written by the team.
+--}}
+
+{{#if success}}
+  <div class="success-banner">
+    {{#if (eq success "create")}}
+      Rail line created successfully.
+    {{else if (eq success "update")}}
+      Rail line updated successfully.
+    {{else if (eq success "delete")}}
+      Rail line deleted successfully.
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if error}}
+  <div class="error-banner">
+
+    {{#if (eq error "create-failed")}}
+      <strong>Error:</strong> A rail line with this name already exists.
+    {{/if}}
+
+    {{#if (eq error "update-failed")}}
+      <strong>Error:</strong> Another rail line already uses that name.
+    {{/if}}
+
+    {{#if (eq error "delete-failed")}}
+      <strong>Error:</strong> Cannot delete rail line - it has associated stations or projects.
+    {{/if}}
+
+  </div>
+{{/if}}
+
+<h1>Rail Lines</h1>
+<p class="subtitle">High-speed rail lines and their specifications.</p>
+
+<table class="raillines-table">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Max Speed (km/h)</th>
+    <th>Length (km)</th>
+    <th>Operator</th>
+    <th>Edit</th>
+  </tr>
+
+  {{#each railLines}}
+    <tr>
+      <td>{{lineID}}</td>
+      <td>{{lineName}}</td>
+      <td>{{maxSpeed}}</td>
+      <td>{{lengthKM}}</td>
+      <td>{{operatorName}}</td>
+      <td>
+        <a
+          class="edit-button edit-railline"
+          data-id="{{lineID}}"
+          data-name="{{lineName}}"
+          data-speed="{{maxSpeed}}"
+          data-length="{{lengthKM}}"
+          data-operator="{{operatorID}}"
+          href="#"
+        >Edit</a>
+      </td>
+    </tr>
+  {{/each}}
+</table>
+
+<section class="crud-panel">
+
+  <!-- CREATE -->
+  <h2>Add Rail Line</h2>
+  <form method="POST" action="/railLines/create">
+
+    <label>Line Name:</label>
+    <input type="text" name="lineName" required>
+
+    <label>Max Speed (km/h):</label>
+    <input type="number" name="maxSpeed" required>
+
+    <label>Length (km):</label>
+    <input type="number" step="0.1" name="lengthKM" required>
+
+    <label>Operator:</label>
+    <select name="operatorID" required>
+      <option value="">Select an Operator...</option>
+      {{#each operators}}
+        <option value="{{operatorID}}">
+          {{operatorID}} – {{operatorName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <button type="submit">Add Rail Line</button>
+  </form>
+
+  <!-- UPDATE -->
+  <h2>Update Rail Line</h2>
+  <form method="POST" action="/railLines/update" id="updateRailLineForm">
+    
+    <label>Select Rail Line:</label>
+    <select name="update_lineID" id="lineSelect" required>
+      <option value="">Select a Rail Line...</option>
+      {{#each railLines}}
+        <option value="{{lineID}}">
+          {{lineID}} — {{lineName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <label>New Name:</label>
+    <input type="text" name="update_lineName" id="update_lineName" required>
+
+    <label>New Max Speed (km/h):</label>
+    <input type="number" name="update_maxSpeed" id="update_maxSpeed" required>
+
+    <label>New Length (km):</label>
+    <input type="number" step="0.1" name="update_lengthKM" id="update_lengthKM" required>
+
+    <label>New Operator:</label>
+    <select name="update_operatorID" id="update_operatorID" required>
+      <option value="">Select an Operator...</option>
+      {{#each operators}}
+        <option value="{{operatorID}}">
+          {{operatorID}} — {{operatorName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <button type="submit">Update Rail Line</button>
+  </form>
+
+  <!-- DELETE -->
+  <h2>Delete Rail Line</h2>
+  <form method="POST" action="/railLines/delete">
+    <label>Select Rail Line:</label>
+    <select name="delete_lineID" required>
+      <option value="">Select a Rail Line...</option>
+      {{#each railLines}}
+        <option value="{{lineID}}">
+          {{lineID}} – {{lineName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <button type="submit">Delete Rail Line</button>
+  </form>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const editBtns = document.querySelectorAll(".edit-railline");
+
+      const idSelect       = document.getElementById("lineSelect");
+      const nameInput      = document.getElementById("update_lineName");
+      const speedInput     = document.getElementById("update_maxSpeed");
+      const lengthInput    = document.getElementById("update_lengthKM");
+      const operatorSelect = document.getElementById("update_operatorID");
+
+      const updateForm = document.getElementById("updateRailLineForm");
+
+      editBtns.forEach(btn => {
+        btn.addEventListener("click", e => {
+          e.preventDefault();
+
+          idSelect.value       = btn.dataset.id;
+          nameInput.value      = btn.dataset.name;
+          speedInput.value     = btn.dataset.speed;
+          lengthInput.value    = btn.dataset.length;
+          operatorSelect.value = btn.dataset.operator;
+
+          updateForm.scrollIntoView({ behavior: "smooth", block: "start" });
+
+          updateForm.classList.add("highlight");
+          setTimeout(() => updateForm.classList.remove("highlight"), 800);
+        });
+      });
+    });
+  </script>
+
+</section>

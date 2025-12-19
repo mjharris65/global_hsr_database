@@ -1,0 +1,168 @@
+{{!--
+Citation: ChatGPT (OpenAI, 2025) was used to help refine Handlebars looping
+syntax and ensure consistent data binding. All template structure and content
+were written by the team.
+--}}
+
+{{#if success}}
+  <div class="success-banner">
+    {{#if (eq success "create")}}
+      Line added to project successfully.
+    {{else if (eq success "update")}}
+      Mapping updated successfully.
+    {{else if (eq success "delete")}}
+      Line removed from project successfully.
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if error}}
+  <div class="error-banner">
+    {{#if (eq error "duplicate")}}
+      <strong>Error:</strong> This project–line mapping already exists.
+    {{else if (eq error "update-duplicate")}}
+      <strong>Error:</strong> Update failed - duplicate mapping.
+    {{else if (eq error "delete-failed")}}
+      <strong>Error:</strong> Failed to delete mapping.
+    {{/if}}
+  </div>
+{{/if}}
+
+<h1>Project–Line Mapping</h1>
+<p class="subtitle">Which rail lines belong to which projects.</p>
+
+<table class="mapping-table">
+  <tr>
+    <th>Project Name</th>
+    <th>Line Name</th>
+    <th>Edit</th>
+  </tr>
+
+  {{#each projectLines}}
+    <tr>
+      <td>{{projectName}}</td>
+      <td>{{lineName}}</td>
+      <td>
+        <a
+          class="edit-button edit-projectline"
+          data-project="{{projectID}}"
+          data-line="{{lineID}}"
+          href="#"
+        >Edit</a>
+      </td>
+    </tr>
+  {{/each}}
+</table>
+
+<section class="crud-panel">
+
+  <!-- CREATE -->
+  <h2>Add Mapping</h2>
+  <form method="POST" action="/projectLines/create">
+
+    <label>Select Project:</label>
+    <select name="projectID" required>
+      {{#each projects}}
+        <option value="{{projectID}}">
+          {{projectID}} — {{projectName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <label>Select Rail Line:</label>
+    <select name="lineID" required>
+      {{#each railLines}}
+        <option value="{{lineID}}">
+          {{lineID}} — {{lineName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <button type="submit">Add Mapping</button>
+  </form>
+
+  <!-- UPDATE -->
+  <h2>Update Mapping</h2>
+  <form method="POST" action="/projectLines/update" id="updatePLForm">
+
+    <label>Current Mapping:</label>
+    <select name="currentMapping" id="currentMappingSelect" required>
+      <option value="">Select a mapping to update...</option>
+      {{#each projectLines}}
+        <option value="{{projectID}}-{{lineID}}">
+          {{projectName}} — {{lineName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <label>New Project:</label>
+    <select name="new_projectID" id="pl_projectSelect" required>
+      {{#each projects}}
+        <option value="{{projectID}}">
+          {{projectID}} — {{projectName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <label>New Line:</label>
+    <select name="new_lineID" id="pl_lineSelect" required>
+      {{#each railLines}}
+        <option value="{{lineID}}">
+          {{lineID}} — {{lineName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <button type="submit">Update Mapping</button>
+  </form>
+
+  <!-- DELETE -->
+  <h2>Delete Mapping</h2>
+  <form method="POST" action="/projectLines/delete">
+
+    <label>Select Mapping:</label>
+    <select name="lineID_projectID_pair" required>
+      {{#each projectLines}}
+        <option value="{{projectID}}-{{lineID}}">
+          {{projectName}} — {{lineName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <button type="submit">Delete Mapping</button>
+  </form>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const editBtns = document.querySelectorAll(".edit-projectline");
+
+  const currentMappingSelect = document.getElementById("currentMappingSelect");
+  const projSelect = document.getElementById("pl_projectSelect");
+  const lineSelect = document.getElementById("pl_lineSelect");
+  const updateForm = document.getElementById("updatePLForm");
+
+  editBtns.forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.preventDefault();
+
+      const projectID = btn.dataset.project;
+      const lineID = btn.dataset.line;
+
+      // Set the current mapping
+      currentMappingSelect.value = `${projectID}-${lineID}`;
+      
+      // Pre-fill the new values with current values
+      projSelect.value = projectID;
+      lineSelect.value = lineID;
+
+      if (updateForm) {
+        updateForm.scrollIntoView({ behavior: "smooth", block: "start" });
+        
+        // Add highlight animation
+        updateForm.classList.add("highlight");
+        setTimeout(() => updateForm.classList.remove("highlight"), 700);
+      }
+    });
+  });
+});
+</script>

@@ -1,0 +1,91 @@
+{{!--
+Citation: ChatGPT (OpenAI, 2025) was used to help refine Handlebars looping
+syntax and ensure consistent data binding. All template structure and content
+were written by the team.
+--}}
+
+{{#if success}}
+  <div class="success-banner">
+    {{#if (eq success "create")}}
+      Station created successfully.
+    {{else if (eq success "delete")}}
+      Station deleted successfully.
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if error}}
+  <div class="error-banner">
+
+    {{#if (eq error "create-failed")}}
+      <strong>Error:</strong> A station with this name already exists in that city.
+    {{/if}}
+
+    {{#if (eq error "delete-failed")}}
+      <strong>Error:</strong> Cannot delete station - it is assigned to rail lines.
+    {{/if}}
+
+  </div>
+{{/if}}
+
+<h1>Stations</h1>
+<p class="subtitle">
+ Major high-speed rail terminals and cities they serve.
+</p>
+
+<table class="stations-table">
+  <tr>
+    <th>ID</th>
+    <th>Station Name</th>
+    <th>City</th>
+    <th>Country</th>
+  </tr>
+  {{#each stations}}
+    <tr>
+      <td>{{stationID}}</td>
+      <td>{{stationName}}</td>
+      <td>{{city}}</td>
+      <td>{{countryName}}</td>
+    </tr>
+  {{/each}}
+</table>
+
+<section class="crud-panel">
+
+  <!-- CREATE -->
+  <h2>Add Station</h2>
+  <form method="POST" action="/stations/create" class="form-section">
+    <label>Station Name:</label>
+    <input type="text" name="stationName" required>
+
+    <label>City:</label>
+    <input type="text" name="city" required>
+
+    <label>Country:</label>
+    <select name="countryID" required>
+      {{#each countries}}
+        <option value="{{countryID}}">
+          {{countryID}} – {{countryName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <button type="submit">Add Station</button>
+  </form>
+
+  <!-- DELETE -->
+  <h2>Delete Station</h2>
+  <form method="POST" action="/stations/delete" class="form-section">
+    <label>Select Station:</label>
+    <select name="delete_stationID" required>
+      {{#each stations}}
+        <option value="{{stationID}}">
+          {{stationID}} – {{stationName}} ({{city}})
+        </option>
+      {{/each}}
+    </select>
+
+    <button type="submit" class="danger">Delete Station</button>
+  </form>
+
+</section>

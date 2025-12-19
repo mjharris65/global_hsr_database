@@ -1,0 +1,105 @@
+{{!--
+Citation: ChatGPT (OpenAI, 2025) was used to help refine Handlebars looping
+syntax and ensure consistent data binding. All template structure and content
+were written by the team.
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Light mode favicon -->
+<link rel="icon"
+      type="image/svg+xml"
+      href="/icons/noun-high-speed-rail-5183574.svg"
+      media="(prefers-color-scheme: light)" />
+
+<!-- Dark mode favicon -->
+<link rel="icon"
+      type="image/svg+xml"
+      href="/icons/noun-high-speed-rail-5185234.svg"
+      media="(prefers-color-scheme: dark)" />
+
+<!-- Fallback for older browsers -->
+<link rel="icon" href="/icons/noun-high-speed-rail-5183574.png">
+
+  <meta charset="UTF-8">
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+
+<body>
+  <!-- Fullscreen Background Video -->
+  <video id="bg-video" autoplay loop muted playsinline>
+    <source src="/videos/train_bg.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
+  <!-- Custom Mute Toggle Button -->
+  <button id="mute-toggle" aria-label="Unmute sound">
+    🔇
+  </button>
+  <!-- NEW: Pause Toggle Button -->
+<button id="pause-toggle" aria-label="Pause video">
+  ⏸
+</button>
+
+  <!-- Fixed Navigation -->
+  <nav>
+    <a href="/">Home</a>
+    <a href="/countries">Countries</a>
+    <a href="/operators">Operators</a>
+    <a href="/railLines">Rail Lines</a>
+    <a href="/stations">Stations</a>
+    <a href="/projects">Projects</a>
+    <a href="/projectLines">Project–Line Mapping</a>
+    <a href="/lineStations">Line–Station Mapping</a>
+    <a href="/reset-database" class="reset-link">RESET</a>
+  </nav>
+
+    <!-- Main Content Overlay -->
+  <main class="overlay-content">
+    {{{body}}}
+  </main>
+
+  <!-- Video + Audio Script (Only functionality you want to keep) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const video = document.getElementById('bg-video');
+      const muteBtn = document.getElementById('mute-toggle');
+      const pauseBtn = document.getElementById('pause-toggle');
+
+      // Mute / Unmute toggle
+      if (muteBtn && video) {
+        muteBtn.addEventListener('click', () => {
+          if (video.muted) {
+            video.muted = false;
+            muteBtn.textContent = '🔊';
+            muteBtn.setAttribute('aria-label', 'Mute sound');
+          } else {
+            video.muted = true;
+            muteBtn.textContent = '🔇';
+            muteBtn.setAttribute('aria-label', 'Unmute sound');
+          }
+        });
+      }
+
+      // Pause / Play toggle
+      if (pauseBtn && video) {
+        pauseBtn.addEventListener('click', () => {
+          if (video.paused) {
+            video.play();
+            pauseBtn.textContent = '⏸';
+            pauseBtn.setAttribute('aria-label', 'Pause video');
+          } else {
+            video.pause();
+            pauseBtn.textContent = '▶';
+            pauseBtn.setAttribute('aria-label', 'Play video');
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>

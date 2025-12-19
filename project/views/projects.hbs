@@ -1,0 +1,177 @@
+{{!--
+Citation: ChatGPT (OpenAI, 2025) was used to help refine Handlebars looping
+syntax and ensure consistent data binding. All template structure and content
+were written by the team.
+--}}
+
+{{#if success}}
+  <div class="success-banner">
+    {{#if (eq success "create")}}
+      Project created successfully.
+    {{else if (eq success "update")}}
+      Project updated successfully.
+    {{else if (eq success "delete")}}
+      Project deleted successfully.
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if error}}
+  <div class="error-banner">
+    {{#if (eq error "create-failed")}}
+      <strong>Error:</strong> A project with this name already exists.
+    {{/if}}
+    {{#if (eq error "update-failed")}}
+      <strong>Error:</strong> Another project already uses that name.
+    {{/if}}
+    {{#if (eq error "delete-failed")}}
+      <strong>Error:</strong> Cannot delete project - it has associated rail lines.
+    {{/if}}
+  </div>
+{{/if}}
+
+<h1>Projects</h1>
+<p class="subtitle">Major high-speed rail construction and upgrade projects.</p>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Status</th>
+    <th>Start Year</th>
+    <th>End Year</th>
+    <th>Edit</th>
+  </tr>
+
+  {{#each projects}}
+    <tr>
+      <td>{{projectID}}</td>
+      <td>{{projectName}}</td>
+      <td>{{status}}</td>
+      <td>{{startYear}}</td>
+      <td>{{endYear}}</td>
+      <td>
+        <a
+          class="edit-button edit-project"
+          data-id="{{projectID}}"
+          data-name="{{projectName}}"
+          data-status="{{status}}"
+          data-start="{{startYear}}"
+          data-end="{{endYear}}"
+          href="#"
+        >Edit</a>
+      </td>
+    </tr>
+  {{/each}}
+</table>
+
+<section class="crud-panel">
+
+  <!-- CREATE -->
+  <h2>Add Project</h2>
+  <form method="POST" action="/projects/create">
+
+    <label>Project Name:</label>
+    <input type="text" name="projectName" required>
+
+    <label>Status:</label>
+    <select name="status" required>
+      <option value="Planned">Planned</option>
+      <option value="Under Construction">Under Construction</option>
+      <option value="Operational">Operational</option>
+      <option value="Cancelled">Cancelled</option>
+    </select>
+
+    <label>Start Year:</label>
+    <input type="number" name="startYear" min="1900" max="2100" required>
+
+    <label>End Year (optional):</label>
+    <input type="number" name="endYear" min="1900" max="2100">
+
+    <button type="submit">Add Project</button>
+  </form>
+
+  <!-- UPDATE -->
+  <h2>Update Project</h2>
+  <form method="POST" action="/projects/update" id="updateProjectForm">
+
+    <label>Select Project:</label>
+    <select name="update_projectID" id="projectSelect" required>
+      <option value="">Select a Project...</option>
+      {{#each projects}}
+        <option value="{{projectID}}">
+          {{projectID}} — {{projectName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <label>New Name:</label>
+    <input type="text" name="update_projectName" id="update_projectName" required>
+
+    <label>New Status:</label>
+    <select name="update_status" id="update_status" required>
+      <option value="Planned">Planned</option>
+      <option value="Under Construction">Under Construction</option>
+      <option value="Operational">Operational</option>
+      <option value="Cancelled">Cancelled</option>
+    </select>
+
+    <label>New Start Year:</label>
+    <input type="number" name="update_startYear" id="update_startYear" min="1900" max="2100" required>
+
+    <label>New End Year:</label>
+    <input type="number" name="update_endYear" id="update_endYear" min="1900" max="2100">
+
+    <button type="submit">Update Project</button>
+  </form>
+
+  <!-- DELETE -->
+  <h2>Delete Project</h2>
+  <form method="POST" action="/projects/delete">
+
+    <label>Select Project:</label>
+    <select name="delete_projectID" required>
+      <option value="">Select a Project...</option>
+      {{#each projects}}
+        <option value="{{projectID}}">
+          {{projectID}} — {{projectName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <button type="submit">Delete Project</button>
+  </form>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const editBtns = document.querySelectorAll(".edit-project");
+
+  const idSelect   = document.getElementById("projectSelect");
+  const nameInput  = document.getElementById("update_projectName");
+  const statusSel  = document.getElementById("update_status");
+  const startInput = document.getElementById("update_startYear");
+  const endInput   = document.getElementById("update_endYear");
+
+  const updateForm = document.getElementById("updateProjectForm");
+
+  editBtns.forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.preventDefault();
+
+      idSelect.value   = btn.dataset.id;
+      nameInput.value  = btn.dataset.name;
+      statusSel.value  = btn.dataset.status;
+      startInput.value = btn.dataset.start;
+      endInput.value   = btn.dataset.end || "";
+
+      if (updateForm) {
+        updateForm.scrollIntoView({ behavior: "smooth", block: "start" });
+        
+        // Add highlight animation
+        updateForm.classList.add("highlight");
+        setTimeout(() => updateForm.classList.remove("highlight"), 700);
+      }
+    });
+  });
+});
+</script>

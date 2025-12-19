@@ -1,0 +1,193 @@
+{{!--
+Citation: ChatGPT (OpenAI, 2025) was used to help refine Handlebars looping
+syntax and ensure consistent data binding. All template structure and content
+were written by the team.
+--}}
+
+{{#if success}}
+  <div class="success-banner">
+    {{#if (eq success "create")}}
+      Station added to line successfully.
+    {{else if (eq success "delete")}}
+      Station removed from line successfully.
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if error}}
+  <div class="error-banner">
+    {{#if (eq error "duplicate")}}
+      <strong>Error:</strong> This line–station mapping already exists.
+    {{else if (eq error "delete-failed")}}
+      <strong>Error:</strong> Failed to delete mapping. Please try again.
+    {{/if}}
+  </div>
+{{/if}}
+
+<h1>Line–Station Mapping</h1>
+<p class="subtitle">
+  Defines which stations each rail line serves and in what order.
+</p>
+
+<table class="mapping-table">
+  <tr>
+    <th>Line Name</th>
+    <th>Station Name</th>
+    <th>Stop Order</th>
+  </tr>
+  {{#each lineStationMappings}}
+    <tr>
+      <td>{{lineName}}</td>
+      <td>{{stationName}}</td>
+      <td>{{stopOrder}}</td>
+    </tr>
+  {{/each}}
+</table>
+
+<section class="crud-panel">
+
+  <!-- CREATE -->
+  <h2>Add Station to Line</h2>
+  <form method="POST" action="/lineStations/create" class="form-section">
+
+    <label>Line:</label>
+    <select name="lineID" required>
+      {{#each railLines}}
+        <option value="{{lineID}}">
+          {{lineID}} – {{lineName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <label>Station:</label>
+    <select name="stationID" required>
+      {{#each stations}}
+        <option value="{{stationID}}">
+          {{stationID}} – {{stationName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <label>Stop Order:</label>
+    <input type="number" name="stopOrder" min="1" required>
+
+    <button type="submit">Add Mapping</button>
+  </form>
+
+<!-- DELETE -->
+<h2>Remove Station from Line</h2>
+
+<form method="POST" action="/lineStations/delete" id="deleteMappingForm">
+
+  <label>Line:</label>
+  <select id="deleteLineSelect" required>
+    <option value="">Select a Line...</option>
+    {{#each railLines}}
+      <option value="{{lineID}}">{{lineName}}</option>
+    {{/each}}
+  </select>
+
+  <label>Station:</label>
+  <select name="mapping" id="deleteStationSelect" required disabled>
+    <option value="">Select a Station...</option>
+  </select>
+
+  <button type="submit">Delete Mapping</button>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ==================== DELETE FORM LOGIC ====================
+  // This handles filtering stations that ARE mapped to the selected line
+  const deleteMappings = {{{json lineStationMappings}}};
+  const deleteLineSelect = document.getElementById("deleteLineSelect");
+  const deleteStationSelect = document.getElementById("deleteStationSelect");
+  const deleteForm = document.getElementById("deleteMappingForm");
+
+  if (deleteLineSelect && deleteStationSelect) {
+    deleteLineSelect.addEventListener("change", () => {
+      const lineID = deleteLineSelect.value;
+
+      deleteStationSelect.innerHTML = '<option value="">Select a Station...</option>';
+
+      if (!lineID) {
+        deleteStationSelect.disabled = true;
+        return;
+      }
+
+      // Filter to show ONLY stations mapped to this line
+      const filtered = deleteMappings.filter(m => m.lineID == lineID);
+
+      filtered.forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = `${m.lineID},${m.stationID}`;
+        opt.textContent = m.stationName;
+        deleteStationSelect.appendChild(opt);
+      });
+
+      deleteStationSelect.disabled = false;
+    });
+
+    deleteForm.addEventListener("submit", e => {
+      if (!deleteStationSelect.value) {
+        e.preventDefault();
+        alert("Please select a station to remove.");
+      }
+    });
+  }
+
+  // ==================== CREATE FORM LOGIC ====================
+  // This handles filtering stations that are NOT yet mapped to the selected line
+  const createMappingsByLine = {{{json mappingsByLine}}};
+  const createAllStations = {{{json stations}}};
+  const createLineSelect = document.querySelector("form[action='/lineStations/create'] select[name='lineID']");
+  const createStationSelect = document.querySelector("form[action='/lineStations/create'] select[name='stationID']");
+
+  function refreshCreateDropdown() {
+    const lineID = createLineSelect.value;
+
+    // Clear the dropdown
+    createStationSelect.innerHTML = "";
+
+    // Determine used stations for this line
+    const usedStationIDs = new Set();
+    if (createMappingsByLine[lineID]) {
+      createMappingsByLine[lineID].forEach(item => {
+        usedStationIDs.add(item.stationID);
+      });
+    }
+
+    // Add all stations NOT used yet
+    let availableCount = 0;
+    createAllStations.forEach(st => {
+      if (!usedStationIDs.has(st.stationID)) {
+        const opt = document.createElement("option");
+        opt.value = st.stationID;
+        opt.textContent = `${st.stationID} – ${st.stationName}`;
+        createStationSelect.appendChild(opt);
+        availableCount++;
+      }
+    });
+
+    // If none available
+    if (availableCount === 0) {
+      const opt = document.createElement("option");
+      opt.value = "";
+      opt.disabled = true;
+      opt.selected = true;
+      opt.textContent = "(No unmapped stations remain)";
+      createStationSelect.appendChild(opt);
+    }
+  }
+
+  // Initialize CREATE dropdown on load
+  if (createLineSelect && createStationSelect) {
+    refreshCreateDropdown();
+    
+    // Recalculate when line changes
+    createLineSelect.addEventListener("change", refreshCreateDropdown);
+  }
+
+});
+</script>

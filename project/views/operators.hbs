@@ -1,0 +1,172 @@
+{{!--
+Citation: ChatGPT (OpenAI, 2025) was used to help refine Handlebars looping
+syntax and ensure consistent data binding. All template structure and content
+were written by the team.
+--}}
+
+{{#if success}}
+  <div class="success-banner">
+    {{#if (eq success "create")}}
+      Operator created successfully.
+    {{else if (eq success "update")}}
+      Operator updated successfully.
+    {{else if (eq success "delete")}}
+      Operator deleted successfully.
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if error}}
+  <div class="error-banner">
+
+    {{#if (eq error "create-failed")}}
+      <strong>Error:</strong> An operator with that name already exists.
+    {{/if}}
+
+    {{#if (eq error "update-failed")}}
+      <strong>Error:</strong> Update failed – another operator already uses that name.
+    {{/if}}
+
+    {{#if (eq error "delete-failed")}}
+      <strong>Error:</strong> Cannot delete this operator - it has associated rail lines.
+    {{/if}}
+
+  </div>
+{{/if}}
+
+<h1>Operators</h1>
+<p class="subtitle">Organizations responsible for managing high-speed rail services.</p>
+
+<table>
+  <tr>
+  <th>ID</th>
+  <th>Name</th>
+  <th>Founded</th>
+  <th>Country</th>
+  <th>Edit</th>
+</tr>
+
+  {{#each operators}}
+  <tr>
+    <td>{{operatorID}}</td>
+    <td>{{operatorName}}</td>
+    <td>{{foundedYear}}</td>
+    <td>{{countryName}}</td>
+    <td>
+      <a
+        class="edit-button edit-operator"
+        data-id="{{operatorID}}"
+        data-name="{{operatorName}}"
+        data-year="{{foundedYear}}"
+        data-country="{{countryID}}"
+        href="#"
+      >Edit</a>
+    </td>
+  </tr>
+{{/each}}
+
+</table>
+
+<section class="crud-panel">
+
+  <!-- CREATE -->
+  <h2>Add Operator</h2>
+  <form method="POST" action="/operators/create">
+
+    <label>Name:</label>
+    <input type="text" name="operatorName" required>
+
+    <label>Founded Year:</label>
+    <input type="number" name="foundedYear" min="1800" max="2100" required>
+
+    <label>Country:</label>
+    <select name="countryID" required>
+      {{#each countries}}
+        <option value="{{countryID}}">
+          {{countryID}} – {{countryName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <button type="submit">Add Operator</button>
+  </form>
+
+  <!-- UPDATE -->
+<h2>Update Operator</h2>
+<form method="POST" action="/operators/update" id="updateOperatorForm">
+  <label>Select Operator:</label>
+  <select name="update_operatorID" id="operatorSelect" required>
+    <option value="">Select an Operator...</option>
+    {{#each operators}}
+      <option value="{{operatorID}}">
+        {{operatorID}} — {{operatorName}}
+      </option>
+    {{/each}}
+  </select>
+
+  <label>New Name:</label>
+  <input type="text" name="update_operatorName" id="update_operatorName" required>
+
+  <label>New Founded Year:</label>
+  <input type="number" name="update_foundedYear" id="update_foundedYear" min="1800" max="2100" required>
+
+  <label>New Country:</label>
+  <select name="update_countryID" id="update_countryID" required>
+    <option value="">Select a Country...</option>
+    {{#each countries}}
+      <option value="{{countryID}}">
+        {{countryID}} — {{countryName}}
+      </option>
+    {{/each}}
+  </select>
+
+  <button type="submit">Update Operator</button>
+</form>
+
+
+ <!-- DELETE -->
+  <h2>Delete Operator</h2>
+  <form method="POST" action="/operators/delete">
+
+    <label>Select Operator:</label>
+    <select name="delete_operatorID" required>
+      {{#each operators}}
+        <option value="{{operatorID}}">
+          {{operatorID}} – {{operatorName}}
+        </option>
+      {{/each}}
+    </select>
+
+    <button type="submit">Delete Operator</button>
+  </form>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const editBtns = document.querySelectorAll(".edit-operator");
+
+  const idSelect      = document.getElementById("operatorSelect");
+  const nameInput     = document.getElementById("update_operatorName");
+  const yearInput     = document.getElementById("update_foundedYear");
+  const countrySelect = document.getElementById("update_countryID");
+
+  const updateForm = document.getElementById("updateOperatorForm");
+
+  editBtns.forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.preventDefault();
+
+      idSelect.value      = btn.dataset.id;
+      nameInput.value     = btn.dataset.name;
+      yearInput.value     = btn.dataset.year;
+      countrySelect.value = btn.dataset.country;
+
+      if (updateForm) {
+        updateForm.scrollIntoView({ behavior: "smooth", block: "start" });
+        
+        // Add highlight animation
+        updateForm.classList.add("highlight");
+        setTimeout(() => updateForm.classList.remove("highlight"), 700);
+      }
+    });
+  });
+});
+</script>

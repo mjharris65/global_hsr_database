@@ -1,0 +1,186 @@
+{{!--
+Citation: ChatGPT (OpenAI, 2025) was used to help refine Handlebars looping
+syntax and ensure consistent data binding. All template structure and content
+were written by the team.
+--}}
+
+{{#if success}}
+  <div class="success-banner">
+    {{#if (eq success "create")}}
+      Country created successfully.
+    {{else if (eq success "update")}}
+      Country updated successfully.
+    {{else if (eq success "delete")}}
+      Country deleted successfully.
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if error}}
+  <div class="error-banner">
+
+    {{#if (eq error "duplicate-create")}}
+      <strong>Error:</strong> A country with this name already exists.
+    {{/if}}
+
+    {{#if (eq error "duplicate-update")}}
+      <strong>Error:</strong> Update failed — another country already uses that name.
+    {{/if}}
+
+    {{#if (eq error "delete-failed")}}
+      <strong>Error:</strong> Cannot delete country - it has associated operators or stations.
+    {{/if}}
+
+  </div>
+{{/if}}
+
+<h1>Countries</h1>
+<p class="subtitle">National profiles for each high-speed rail network.</p>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Country</th>
+    <th>Continent</th>
+    <th>Population</th>
+    <th>Edit</th>
+  </tr>
+
+  {{#each countries}}
+    <tr>
+      <td>{{countryID}}</td>
+      <td>{{countryName}}</td>
+      <td>{{continent}}</td>
+      <td>{{populationMillions}}</td>
+
+      <td>
+  <a
+    href="#"
+    class="edit-button"
+    data-id="{{countryID}}"
+    data-name="{{countryName}}"
+    data-continent="{{continent}}"
+    data-pop="{{populationMillions}}"
+  >
+    Edit
+  </a>
+</td>
+
+    </tr>
+  {{/each}}
+</table>
+
+
+<section class="crud-panel">
+
+  <!-- CREATE -->
+  <h2>Add Country</h2>
+  <form method="POST" action="/countries/create">
+    <label>Country Name:</label>
+    <input type="text" name="countryName" required>
+
+    <label>Continent:</label>
+    <input type="text" name="continent" required>
+
+    <label>Population (millions):</label>
+    <input type="number" step="0.01" name="populationMillions">
+
+    <button type="submit">Add</button>
+  </form>
+
+<!-- UPDATE -->
+ <h2>Update Country</h2>
+
+<form method="POST" action="/countries/update">
+
+  <label>Select Country:</label>
+  <select name="update_countryID" id="update_countryID" required>
+    {{#each countries}}
+      <option value="{{countryID}}">
+        {{countryID}} – {{countryName}} ({{continent}})
+      </option>
+    {{/each}}
+  </select>
+
+  <label>New Country Name:</label>
+  <input
+    type="text"
+    name="update_countryName"
+    id="update_countryName"
+    required
+  >
+
+  <label>New Continent:</label>
+  <input
+    type="text"
+    name="update_continent"
+    id="update_continent"
+    required
+  >
+
+  <label>New Population (millions):</label>
+  <input
+    type="number"
+    step="0.01"
+    name="update_populationMillions"
+    id="update_populationMillions"
+    required
+  >
+
+  <button type="submit">Update</button>
+</form>
+
+
+
+  <!-- DELETE -->
+  <h2>Delete Country</h2>
+  <form method="POST" action="/countries/delete">
+    <label>Select Country:</label>
+    <select name="delete_countryID" required>
+      {{#each countries}}
+        <option value="{{countryID}}">
+          {{countryID}} – {{countryName}} ({{continent}})
+        </option>
+      {{/each}}
+    </select>
+    <button type="submit">Delete</button>
+  </form>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const editButtons = document.querySelectorAll(".edit-button");
+    const idSelect   = document.getElementById("update_countryID");
+    const nameInput  = document.getElementById("update_countryName");
+    const contInput  = document.getElementById("update_continent");
+    const popInput   = document.getElementById("update_populationMillions");
+
+    const updateSection = document.querySelector("form[action='/countries/update']");
+
+    editButtons.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const id        = btn.dataset.id;
+        const name      = btn.dataset.name;
+        const continent = btn.dataset.continent;
+        const pop       = btn.dataset.pop;
+
+        // Fill form fields
+        if (idSelect)  idSelect.value = id;
+        if (nameInput) nameInput.value = name || "";
+        if (contInput) contInput.value = continent || "";
+        if (popInput)  popInput.value = pop || "";
+
+        // Smooth scroll to update form
+        if (updateSection) {
+          updateSection.scrollIntoView({ behavior: "smooth", block: "start" });
+
+          // Add highlight animation
+          updateSection.classList.add("highlight");
+          setTimeout(() => updateSection.classList.remove("highlight"), 700);
+        }
+      });
+    });
+  });
+</script>
