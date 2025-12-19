@@ -726,22 +726,23 @@ form {
 /* Mobile responsive navigation */
 @media (max-width: 768px) {
   nav {
-    padding: 0 5px; /* Add horizontal padding to nav container */
+    display: flex;
+    justify-content: space-between;
+    overflow-x: auto; /* Allow horizontal scroll if needed */
+    padding: 0;
   }
   
   nav a {
-    font-size: 9px;      /* Smaller font */
-    padding: 8px 4px;    /* Less horizontal padding */
-    white-space: nowrap; /* Prevent text wrapping */
+    font-size: clamp(8px, 2vw, 11px); /* Fluid sizing */
+    padding: 8px 3px;
+    white-space: nowrap;
+    flex-shrink: 0; /* Prevent shrinking */
   }
 }
 
-/* Extra small phones */
 @media (max-width: 400px) {
   nav a {
-    font-size: 8px;
-    padding: 8px 3px;
+    font-size: clamp(7px, 1.8vw, 9px);
+    padding: 8px 2px;
   }
 }
-
-
