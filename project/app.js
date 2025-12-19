@@ -20,6 +20,25 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Auto-initialize database if tables don't exist (for Railway restarts)
+async function ensureTablesExist() {
+  try {
+    const [tables] = await db.query("SHOW TABLES LIKE 'Countries'");
+    if (tables.length === 0) {
+      console.log('Tables missing - initializing database...');
+      await db.query('CALL sp_ResetHSRDatabase()');
+      console.log('Database initialized successfully');
+    }
+  } catch (error) {
+    console.error('Database initialization error:', error);
+  }
+}
+
+// Run on startup
+await ensureTablesExist();
+
+// Now your existing routes...
+
 
 // -------------------------------
 // Handlebars
