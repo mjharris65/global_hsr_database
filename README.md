@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./IMG_5138.jpg" alt="High-Speed Rail Banner" style="width:100%; border-radius: 8px;">
+  <img src="banner.jpg" alt="High-Speed Rail Banner" width="100%">
 </p>
 
 ---
