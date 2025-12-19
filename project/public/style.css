@@ -723,9 +723,12 @@ form {
   transition: background-color 0.4s ease;
 }
 
-
-
-
-
+/*mobile reponsive navigation */
+@media (max-width: 768px) {
+  nav a {
+    font-size: 11px;
+    padding: 8px 6px;
+  }
+}
 
 
