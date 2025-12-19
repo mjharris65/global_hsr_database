@@ -27,7 +27,7 @@ The Global High-Speed Rail Infrastructure Database models the operational struct
 - Construction projects and their relationships to rail lines
 - Complex many-to-many relationships between entities
 
-Key features include full CRUD operations with referential integrity enforcement, dynamic form interactions, success/error feedback systems, and a cyberpunk-inspired visual design with ambient video and audio.
+Key features include full CRUD operations with referential integrity enforcement, dynamic form interactions, and a polished, cyberpunk-inspired user interface.
 
 ---
 
