@@ -35,11 +35,13 @@ This project emphasizes real-world relational modeling over toy datasets, mirror
 
 <p>
   <b>Entity Management (CRUD)</b><br/>
+  <p>
   <img src="docs/screenshots/table-page.jpeg" width="900" alt="Entity table page screenshot">
 </p>
 
 <p>
   <b>Many-to-Many Mapping</b><br/>
+  <p>
   <img src="docs/screenshots/mn-mapping.jpeg" width="900" alt="Many-to-many mapping page screenshot">
 </p>
 
