@@ -646,3 +646,14 @@ form {
   transition: background-color 0.4s ease;
 }
 
+/* Make the nav more compact so RESET fits (no other layout changes) */
+nav {
+  padding: 10px 6px;     /* was 12px 10px */
+  gap: 0.85rem;          /* was 1.2rem */
+  row-gap: 0.35rem;      /* was 0.6rem */
+}
+
+nav a {
+  font-size: 0.80rem;    /* smaller than your clamp */
+  letter-spacing: 0.6px; /* was 0.8px */
+}
