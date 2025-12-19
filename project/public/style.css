@@ -51,10 +51,10 @@ nav {
   backdrop-filter: blur(10px);
 
   display: flex;
-  flex-wrap: wrap;              
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 1.2rem;                  
-  row-gap: 0.6rem;             
+  gap: 1.2rem;
+  row-gap: 0.6rem;
 
   padding: 12px 10px;
   border-bottom: 2px solid var(--accent-red);
@@ -76,7 +76,6 @@ nav a:hover {
   text-shadow: 0 0 8px hsl(48, 100%, 55%);
 }
 
-
 /* ===== MAIN CONTENT OVERLAY ===== */
 .overlay-content {
   position: relative;
@@ -91,7 +90,6 @@ nav a:hover {
 
   transition: opacity 0.35s ease, transform 0.4s ease;
 }
-
 
 .overlay-content.loading {
   opacity: 0;
@@ -110,7 +108,7 @@ h1 {
 }
 
 h2 {
-  color: (white);
+  color: white;
   font-size: 1.3rem;
   margin-top: 30px;
 }
@@ -120,10 +118,10 @@ table {
   border-collapse: collapse;
   width: 100%;
   margin: 20px auto;
-  
   background: rgba(25, 25, 25, 0.95);
   border-radius: 8px;
   overflow: hidden;
+  table-layout: auto;
 }
 
 th {
@@ -132,19 +130,21 @@ th {
   padding: 12px 15px;
   font-weight: 700;
   text-align: left;
+  white-space: nowrap;
 }
 
 td {
   color: var(--text-light);
   padding: 12px 15px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 tr {
   transition: background 0.25s ease, box-shadow 0.25s ease;
 }
-
-
 
 tr:nth-child(even) td {
   background: rgba(255, 255, 255, 0.02);
@@ -152,13 +152,7 @@ tr:nth-child(even) td {
 
 /* ===== TABLE COLUMN WIDTH CONTROL ===== */
 
-/* DEFAULT: Auto layout for most tables */
-table {
-  table-layout: auto;
-}
-
 /* For 3-column M:N relationship tables (ProjectLines, LineStations) */
-/* Apply fixed layout with equal column distribution */
 table.mapping-table {
   table-layout: fixed !important;
   width: 750px !important;
@@ -194,7 +188,6 @@ table.mapping-table td:nth-child(3) {
 }
 
 /* For standard entity tables */
-/* ID column - narrow and centered */
 table th:first-child:not(.mapping-table th),
 table td:first-child:not(.mapping-table td) {
   width: 60px;
@@ -203,7 +196,6 @@ table td:first-child:not(.mapping-table td) {
   max-width: 60px;
 }
 
-/* Edit/Delete column - narrow and centered */
 table th:last-child:not(.mapping-table th),
 table td:last-child:not(.mapping-table td) {
   width: 80px;
@@ -212,13 +204,11 @@ table td:last-child:not(.mapping-table td) {
   max-width: 80px;
 }
 
-/* Name columns (2nd column) - give them good space */
 table th:nth-child(2):not(.mapping-table th),
 table td:nth-child(2):not(.mapping-table td) {
   min-width: 250px;
 }
 
-/* Year/Number columns - keep them compact */
 table th:nth-child(4):not(.mapping-table th),
 table td:nth-child(4):not(.mapping-table td) {
   width: 120px;
@@ -231,43 +221,18 @@ table td:nth-child(5):not(.mapping-table td) {
   text-align: center;
 }
 
-/* Special case: 5th column in 6-column tables (like Operator in RailLines) */
-/* Give it more width for longer text */
 table th:nth-child(5):not(.mapping-table th):not(:last-child),
 table td:nth-child(5):not(.mapping-table td):not(:last-child) {
   width: 200px;
   text-align: left;
 }
 
-/* Status/Type columns (3rd column) */
 table th:nth-child(3):not(.mapping-table th),
 table td:nth-child(3):not(.mapping-table td) {
   width: 150px;
 }
 
 /* ===== STATIONS TABLE SPECIFIC STYLING ===== */
-/* Custom layout for Stations to use full space and center properly */
-table.stations-table {
-  width: 750px !important;
-  max-width: 750px !important;
-  table-layout: fixed;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-/* ID column - narrow */
-table.stations-table th:nth-child(1),
-table.stations-table td:nth-child(1) {
-  width: 60px;
-  text-align: center;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-/* ===== STATIONS TABLE SPECIFIC STYLING ===== */
-/* Custom layout for Stations to use full space and center properly */
 table.stations-table {
   width: 750px !important;
   max-width: 750px !important;
@@ -278,7 +243,6 @@ table.stations-table {
   margin-bottom: 20px !important;
 }
 
-/* ID column - narrow */
 table.stations-table th:nth-child(1),
 table.stations-table td:nth-child(1) {
   width: 60px !important;
@@ -289,7 +253,6 @@ table.stations-table td:nth-child(1) {
   padding-right: 30px !important;
 }
 
-/* Station Name - reduced right padding to bring closer to City */
 table.stations-table th:nth-child(2),
 table.stations-table td:nth-child(2) {
   width: 300px !important;
@@ -300,7 +263,6 @@ table.stations-table td:nth-child(2) {
   padding-right: 20px !important;
 }
 
-/* City - reduced left padding to bring closer to Station Name */
 table.stations-table th:nth-child(3),
 table.stations-table td:nth-child(3) {
   width: 200px !important;
@@ -311,7 +273,6 @@ table.stations-table td:nth-child(3) {
   padding-right: 30px !important;
 }
 
-/* Year Opened - compact */
 table.stations-table th:nth-child(4),
 table.stations-table td:nth-child(4) {
   width: 110px !important;
@@ -322,7 +283,6 @@ table.stations-table td:nth-child(4) {
   padding-right: 30px !important;
 }
 
-/* Edit/Delete column - narrow */
 table.stations-table th:nth-child(5),
 table.stations-table td:nth-child(5) {
   width: 80px !important;
@@ -334,7 +294,6 @@ table.stations-table td:nth-child(5) {
 }
 
 /* ===== RAILLINES TABLE SPECIFIC STYLING ===== */
-/* Custom layout for RailLines to give Operator column more space */
 table.raillines-table {
   width: 720px !important;
   max-width: 720px !important;
@@ -392,18 +351,6 @@ table.raillines-table td:nth-child(6) {
   padding-right: 20px;
 }
 
-/* Allow text to wrap naturally */
-td {
-  white-space: normal;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-/* Headers stay on one line */
-th {
-  white-space: nowrap;
-}
-
 /* ===== LINKS ===== */
 a {
   color: var(--accent-yellow);
@@ -422,7 +369,7 @@ form {
   padding: 20px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  
+
   max-width: 100%;
   box-sizing: border-box;
   overflow: hidden;
@@ -447,7 +394,7 @@ button {
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-light);
   outline: none;
-  
+
   box-sizing: border-box;
   max-width: 100%;
 }
@@ -490,7 +437,7 @@ button:hover {
   border: 1px solid var(--accent-red);
   border-radius: 20px;
 
-  max-width: min(95%, 900px);    
+  max-width: min(95%, 900px);
   padding: clamp(1.6rem, 5vw, 3rem);
 
   box-shadow: 0 0 20px rgba(255, 60, 0, 0.4);
@@ -498,10 +445,8 @@ button:hover {
   animation: fadeIn 1.4s ease-in-out;
 }
 
-
 .hero-title {
   color: var(--accent-red);
-  font-size: 2rem;
   font-weight: 800;
   margin-bottom: 1rem;
   letter-spacing: 0.5px;
@@ -583,46 +528,26 @@ video::-webkit-media-controls-panel {
   color: #ff0000;
 }
 
-#mute-toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 100;
-  
-  background: rgba(0, 0, 0, 0.7);
-  border: 2px solid var(--accent-red);
-  border-radius: 50%;
-  
-  width: 50px;
-  height: 50px;
-  
-  font-size: 1.5rem;
-  color: var(--text-light);
-  cursor: pointer;
-  
-  transition: all 0.3s ease;
-}
-
-/* Position pause button next to mute button */
+/* ===== BUTTONS ===== */
 #pause-toggle {
   position: fixed;
   bottom: 20px;
   right: 80px;
   z-index: 100;
-  
+
   background: rgba(0, 0, 0, 0.7);
   border: 2px solid var(--accent-red);
   border-radius: 50%;
-  
+
   width: 40px;
   height: 40px;
-  
+
   font-size: 1.2rem;
   color: var(--text-light);
   cursor: pointer;
-  
+
   transition: all 0.3s ease;
-  
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -638,26 +563,25 @@ video::-webkit-media-controls-panel {
   transform: scale(0.95);
 }
 
-/* ===== MUTE TOGGLE BUTTON ===== */
 #mute-toggle {
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 100;
-  
+
   background: rgba(0, 0, 0, 0.7);
   border: 2px solid var(--accent-red);
   border-radius: 50%;
-  
+
   width: 40px;
   height: 40px;
-  
+
   font-size: 1.2rem;
   color: var(--text-light);
   cursor: pointer;
-  
+
   transition: all 0.3s ease;
-  
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -673,6 +597,7 @@ video::-webkit-media-controls-panel {
   transform: scale(0.95);
 }
 
+/* ===== BANNERS ===== */
 .error-banner {
   background: rgba(255, 50, 50, 0.15);
   border-left: 3px solid hsl(8, 100%, 50%);
@@ -684,6 +609,16 @@ video::-webkit-media-controls-panel {
   backdrop-filter: blur(4px);
 }
 
+.success-banner {
+  background: rgba(50, 255, 50, 0.15);
+  border-left: 3px solid hsl(120, 100%, 40%);
+  color: #b3ffb3;
+  padding: 12px 18px;
+  margin-bottom: 18px;
+  border-radius: 6px;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+}
 
 .edit-button {
   color: #ffd700;
@@ -694,18 +629,6 @@ video::-webkit-media-controls-panel {
 .edit-button:hover {
   color: var(--accent-red);
   text-decoration: none;
-}
-
-/* Success banner - matches error banner style but green */
-.success-banner {
-  background: rgba(50, 255, 50, 0.15);
-  border-left: 3px solid hsl(120, 100%, 40%);
-  color: #b3ffb3;
-  padding: 12px 18px;
-  margin-bottom: 18px;
-  border-radius: 6px;
-  font-weight: 600;
-  backdrop-filter: blur(4px);
 }
 
 /* Highlight animation for Update forms */
@@ -723,68 +646,3 @@ form {
   transition: background-color 0.4s ease;
 }
 
-/* Mobile: force single-line nav without scrolling (shrink + abbreviate) */
-@media (max-width: 768px) {
-  nav {
-    display: flex;
-    flex-wrap: nowrap;           /* one line */
-    justify-content: center;
-    gap: 6px;
-
-    overflow-x: hidden;          /* no top scrollbar */
-    padding: 8px 6px;            /* tighter */
-    box-sizing: border-box;
-    width: 100%;
-  }
-
-  nav a {
-    font-size: 9px;              /* aggressive */
-    padding: 6px 3px;
-    letter-spacing: 0.3px;
-    white-space: nowrap;
-    flex: 0 1 auto;              /* allow a LITTLE shrink if needed */
-  }
-
-  /* Hide the long labels on mobile; we'll replace with short ones */
-  nav a[href="/projectLines"],
-  nav a[href="/lineStations"] {
-    font-size: 0;                /* hides text but keeps the link */
-    padding: 6px 3px;
-  }
-
-  /* Replace with shorter labels */
-  nav a[href="/projectLines"]::after {
-    content: "Proj–Line";
-    font-size: 9px;
-    letter-spacing: 0.3px;
-  }
-
-  nav a[href="/lineStations"]::after {
-    content: "Line–Sta";
-    font-size: 9px;
-    letter-spacing: 0.3px;
-  }
-
-  /* Make RESET even tighter */
-  nav a.reset-link {
-    padding: 6px 2px;
-    letter-spacing: 0.2px;
-  }
-}
-
-@media (max-width: 400px) {
-  nav {
-    gap: 4px;
-    padding: 8px 4px;
-  }
-
-  nav a {
-    font-size: 8px;
-    padding: 6px 2px;
-  }
-
-  nav a[href="/projectLines"]::after,
-  nav a[href="/lineStations"]::after {
-    font-size: 8px;
-  }
-}
