@@ -77,6 +77,10 @@ function renderPartial(req, res, template, context = {}) {
   }
 }
 
+app.get("/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
 // -------------------------------
 // Home
 // -------------------------------
@@ -654,32 +658,6 @@ app.post("/lineStations/delete", async (req, res) => {
 app.get("/reset-database", async (req, res) => {
   await db.query("CALL sp_ResetHSRDatabase();");
   res.redirect("/");
-});
-
-
-import fs from "fs";
-import mysql from "mysql2/promise";
-
-app.get("/__init-db", async (req, res) => {
-  // Simple guard so only YOU can run it
-  if (req.query.key !== process.env.INIT_KEY) {
-    return res.status(403).send("Forbidden");
-  }
-
-  try {
-    const pool = mysql.createPool(process.env.DATABASE_URL);
-
-    const ddl = fs.readFileSync("./database/DDL.sql", "utf8");
-    const pl  = fs.readFileSync("./database/PL.sql", "utf8");
-
-    await pool.query(ddl);
-    await pool.query(pl);
-
-    res.send("✅ Database initialized successfully.");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(String(err));
-  }
 });
 
 // ====================================================================
