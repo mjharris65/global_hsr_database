@@ -32,9 +32,11 @@ Key features include full CRUD operations with referential integrity enforcement
 This project emphasizes real-world relational modeling over toy datasets, mirroring the complexity of production database systems.
 
 **Entity Management (CRUD)**
+
 ![Countries table showing CRUD interface and relational attributes](docs/screenshots/table-page.jpeg)
 
 **Many-to-Many Mapping**
+
 ![Many-to-many mapping page screenshot](docs/screenshots/mn-mapping.jpeg)
 
 ### Screenshots
