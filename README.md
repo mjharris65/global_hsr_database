@@ -107,7 +107,7 @@ global_hsr_database/
 
 3. **Configure database connection**
    
-   Create a `.env` file in the `project/` directory:
+   (See .env.example for required variables):
    ```env
    DB_HOST=localhost
    DB_USER=your_username
