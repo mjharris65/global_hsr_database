@@ -723,11 +723,24 @@ form {
   transition: background-color 0.4s ease;
 }
 
-/*mobile reponsive navigation */
+/* Mobile responsive navigation */
 @media (max-width: 768px) {
+  nav {
+    padding: 0 5px; /* Add horizontal padding to nav container */
+  }
+  
   nav a {
-    font-size: 11px;
-    padding: 8px 6px;
+    font-size: 9px;      /* Smaller font */
+    padding: 8px 4px;    /* Less horizontal padding */
+    white-space: nowrap; /* Prevent text wrapping */
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 400px) {
+  nav a {
+    font-size: 8px;
+    padding: 8px 3px;
   }
 }
 
